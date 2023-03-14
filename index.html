@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+  integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+  integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+  crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+
+    
+
+    <form action="">
+
+    <label for="name">Name</label>
+    <input type="text" id="name"><br><br>
+
+    <label for="name">Email</label>
+    <input type="email" id="email"><br><br>
+
+    <label for="name">Gender</label><br>
+    <input type="radio" name="gender" value="male" >Male <br>
+    <input type="radio" name="gender" value="Female" >Female <br><br>
+
+    <label for="name">Status</label><br>
+    <input type="radio" name="status" value="active" >Active <br>
+    <input type="radio" name="status" value="inactive" >Inactive <br>
+
+    <button type="button" onclick="postData()">Post</button>
+
+    </form>
+    
+    <button type="button" onclick="getData()">Get</button>
+
+    <!-- FORM EDIT DATA -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Update Data</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="row mb-3">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+                  <div class="col-sm-10">
+                  <input type="text" class="form-control" id="nameEdit"></input>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control " id="emailEdit" disabled></input>
+                  </div>
+                </div>
+    
+                <fieldset class="row mb-3">
+                  <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                  <div class="col-sm-10">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="genders" id="genderMale" value="male"></input>
+                      <label class="form-check-label" for="gridRadios1">
+                        Male
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="genders" id="genderFemale" value="female"></input>
+                      <label class="form-check-label" for="gridRadios2">
+                        Female
+                      </label>
+                    </div>
+    
+                  </div>
+                </fieldset>
+    
+                <fieldset class="row mb-3">
+                  <legend class="col-form-label col-sm-2 pt-0">Status</legend>
+                  <div class="col-sm-10">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="statuss" id="statusActive" value="active"></input>
+                    
+                      <label class="form-check-label" for="gridRadios1">
+                        Active
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="statuss" id="statusInactive" value="inactive"></input>
+                      <label class="form-check-label" for="gridRadios2">
+                        Inactive
+                      </label>
+                    </div>
+    
+                  </div>
+                </fieldset>
+    
+                <button type="submit" class="btn btn-primary" id="updated">Update</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <table id="tableData">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+    </table>
+
+<script>
+    let data;
+    async function getData(){
+
+        var settings = {
+  "url": "https://gorest.co.in/public/v2/users",
+  "method": "GET",
+  "timeout": 0,
+  "headers": {
+    "Authorization": "Bearer f1a656da1a431b25b60e43e57e340aef8b4159d912aee8bee8338112c9ba838c"
+  },
+};
+
+await $.ajax(settings).done(function (response) {
+    data=response;
+    console.log(data)
+    var table=[];
+
+    $.each(data, function(index, value) {
+       
+					table += `<tr>
+                        <td>${value.id}</td>
+                        <td>${value.name}</td>
+                        <td> ${ value.email} </td>
+                        <td>${value.gender}</td>
+                        <td>${value.status}</td>
+                        <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" onclick=updated(${index})>Update</button></td>
+                        <td><button type="button" onclick=deleted(${value.id})>Delete</button></td>
+                       
+                        </tr>`;
+            
+                });
+                $('#tableData').html(table);
+});
+    }
+
+
+
+    function postData(){
+
+
+var name=$('#name').val();
+var email=$('#email').val();
+var gender=$("input[name=gender]:checked").val();
+var status=$("input[name=status]:checked").val();
+
+var settings = {
+  "url": "https://gorest.co.in/public/v2/users",
+  "method": "POST",
+  "timeout": 0,
+  "headers": {
+    "Authorization": "Bearer f1a656da1a431b25b60e43e57e340aef8b4159d912aee8bee8338112c9ba838c",
+    "Content-Type": "application/json"
+  },
+  "data": JSON.stringify({
+    "name": name,
+    "email": email,
+    "gender": gender,
+    "status": status
+  }),
+};
+
+$.ajax(settings).done(function (response) {
+  getData()
+});
+
+
+}
+
+function deleted(id){
+    var settings = {
+  "url": `https://gorest.co.in/public/v2/users/${id}`,
+  "method": "DELETE",
+  "timeout": 0,
+  "headers": {
+    "Authorization": "Bearer f1a656da1a431b25b60e43e57e340aef8b4159d912aee8bee8338112c9ba838c"
+  },
+};
+
+$.ajax(settings).done(function (response) {
+    getData()
+});
+}
+
+
+function updated(id){
+    let editData=data[id];
+
+    var nameEdit=$('#nameEdit').val();
+
+    var x=$('editData[id].name').val();
+    // console.log(editData[id].name)
+    nameEdit=x;
+console.log(nameEdit)
+    
+ 
+}
+
+</script>
+
+</body>
+</html>
