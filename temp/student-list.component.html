@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Average</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+    
+            <tbody>
+              <tr *ngFor="let i of Students" >
+                <ng-container *ngIf="i.Active">
+                    <td>{{i.ID}}</td>
+                    <td>{{i.Name}}</td>
+                    <td>{{i.Age}}</td>
+                    <td>{{i.Average}}</td>
+                    <td [ngSwitch]="i.grade">
+                        <span *ngSwitchCase="'A+'" [ngClass]="'AA'">A+</span>
+                        <span *ngSwitchCase="'A'" [ngClass]="'A'">A</span>
+                        <span *ngSwitchCase="'B'" [ngClass]="'B'">B</span>
+                        <span *ngSwitchCase="'C'" [ngClass]="'C'">C</span>
+                        <span *ngSwitchCase="'D'" [ngClass]="'D'">D</span>
+
+                    </td>
+                    <td>Active</td>
+                </ng-container>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+    </div>
+    
+</body>
+</html>
